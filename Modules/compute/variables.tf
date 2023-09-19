@@ -62,10 +62,10 @@ variable "vpc_id" {
 variable "subnet_id" {
   description = "subnet id"
   type = list(string)
-  default = [  ]
 }
 
 variable "allTraffic" {
   description = "Allow all traffic from the internet"
   type        = string
 }
+

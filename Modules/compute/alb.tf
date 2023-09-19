@@ -1,8 +1,15 @@
+# Check if there is only one subnet
+locals {
+  is_single_subnet = length(var.subnet_id) == 1
+}
+
+# Define a condition to control resource creation based on the number of subnets
 resource "aws_lb" "igor_alb" {
+  count              = local.is_single_subnet ? 0 : 1
   name               = "Igor-alb"
   internal           = false
   load_balancer_type = "application"
-  subnets            = var.subnet_id[*]
+  subnets            = var.subnet_id
   security_groups    = [aws_security_group.igor-sg-terra.id]
 
   tags = {
@@ -11,6 +18,7 @@ resource "aws_lb" "igor_alb" {
 }
 
 resource "aws_lb_target_group" "Igor-lb-tg" {
+  count = local.is_single_subnet ? 0 : 1
   name     = "Igor-lb-tg"
   port     = var.Port
   protocol = "HTTP"
@@ -22,19 +30,20 @@ resource "aws_lb_target_group" "Igor-lb-tg" {
 }
 
 resource "aws_lb_listener" "igor_listener" {
-  load_balancer_arn = aws_lb.igor_alb.arn
+  count              = local.is_single_subnet ? 0 : 1
+  load_balancer_arn = aws_lb.igor_alb[0].arn
   port              = var.Port
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.Igor-lb-tg.arn
+    target_group_arn = aws_lb_target_group.Igor-lb-tg[0].arn
   }
 }
 
 resource "aws_lb_target_group_attachment" "target_group_attachment_1" {
-  count            = var.instanceCount
-  target_group_arn = aws_lb_target_group.Igor-lb-tg.arn
+  count            = local.is_single_subnet ? 0 : var.instanceCount
+  target_group_arn = aws_lb_target_group.Igor-lb-tg[0].arn
   target_id        = aws_instance.igor-Easy[count.index].id
   port             = var.Port
 }
