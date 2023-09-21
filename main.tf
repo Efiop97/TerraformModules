@@ -3,7 +3,7 @@ module "network" {
 
 
   availabilityZones = var.availabilityZones
-  allTraffic        = var.allTraffic
+  all_traffic        = var.all_traffic
   vpc_cidr          = var.vpc_cidr
   subnet_cidr       = var.subnet_cidr
   SubnetCount       = var.SubnetCount
@@ -22,7 +22,7 @@ module "compute" {
   Key           = var.Key
   Port          = var.Port
   userdata      = var.userdata
-  allTraffic    = var.allTraffic
+  all_traffic    = var.all_traffic
 
   vpc_id    = module.network.vpc_id
   subnet_id = module.network.subnet_id

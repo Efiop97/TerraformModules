@@ -10,7 +10,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   subnets            = var.subnet_id
-  security_groups    = [aws_security_group.igor-sg-terra.id]
+  security_groups    = [aws_security_group.sec_group.id]
 
   tags = {
     Name = "Igor-alb"
@@ -44,6 +44,6 @@ resource "aws_lb_listener" "listener" {
 resource "aws_lb_target_group_attachment" "target_group_attachment_1" {
   count            = local.is_single_subnet ? 0 : var.instanceCount
   target_group_arn = aws_lb_target_group.lb_tg[0].arn
-  target_id        = aws_instance.igor-Easy[count.index].id
+  target_id        = aws_instance.ec2[count.index].id
   port             = var.Port
 }

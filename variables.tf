@@ -69,7 +69,7 @@ variable "availabilityZones" {
   type        = list(any)
 }
 
-variable "allTraffic" {
+variable "all_traffic" {
   description = "Allow all traffic from the internet"
   type        = string
 }

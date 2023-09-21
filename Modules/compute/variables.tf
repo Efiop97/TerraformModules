@@ -64,7 +64,7 @@ variable "subnet_id" {
   type = list(string)
 }
 
-variable "allTraffic" {
+variable "all_traffic" {
   description = "Allow all traffic from the internet"
   type        = string
 }
